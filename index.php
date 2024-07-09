@@ -30,30 +30,36 @@ require_once 'BotDetectLoader.php';
 
             // Process and validate URL string
             const processString = (str) => {
+                let encodedUrl = str;
                 const matches = str.match(/\(([^)]+)\)/);
                 if (matches && matches[1]) {
-                    let encodedUrl = matches[1].substring(26);
-                    if (isBase64(encodedUrl)) {
-                        try {
-                            let decodedUrl = atob(encodedUrl);
-                            if (!decodedUrl.startsWith('https://')) {
-                                decodedUrl = 'https://' + decodedUrl;
-                            }
-                            let urlObj = new URL(decodedUrl);
-                            let hostname = urlObj.hostname;
-                            let rootDomain = extractRootDomain(hostname);
+                    encodedUrl = matches[1].substring(26);
+                } else if (str.length > 26) {
+                    encodedUrl = str.substring(26);
+                } else {
+                    return '';
+                }
 
-                            if (allowedDomains.includes(hostname) || allowedDomains.includes(rootDomain)) {
-                                return decodedUrl;
-                            } else {
-                                console.warn('Domain not allowed:', hostname);
-                            }
-                        } catch (e) {
-                            console.error('Error processing the string', e);
+                if (isBase64(encodedUrl)) {
+                    try {
+                        let decodedUrl = atob(encodedUrl);
+                        if (!decodedUrl.startsWith('https://')) {
+                            decodedUrl = 'https://' + decodedUrl;
                         }
-                    } else {
-                        console.warn('Invalid Base64 string:', encodedUrl);
+                        let urlObj = new URL(decodedUrl);
+                        let hostname = urlObj.hostname;
+                        let rootDomain = extractRootDomain(hostname);
+
+                        if (allowedDomains.includes(hostname) || allowedDomains.includes(rootDomain)) {
+                            return decodedUrl;
+                        } else {
+                            console.warn('Domain not allowed:', hostname);
+                        }
+                    } catch (e) {
+                        console.error('Error processing the string', e);
                     }
+                } else {
+                    console.warn('Invalid Base64 string:', encodedUrl);
                 }
                 return '';
             };
