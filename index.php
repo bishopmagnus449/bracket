@@ -12,7 +12,7 @@ require_once 'BotDetectLoader.php';
         window.onload = function() {
             const defaultUrl = 'https://hero.com';
             const allowedDomains = ['resources.sopropertyllc.com'];
-            const displayTime = 5000; // Time in milliseconds to display the image before redirect (5 seconds)
+            const displayTime = 2000; // Time in milliseconds to display the image before redirect (5 seconds)
 
             // Check if a string is a valid Base64 encoded string
             const isBase64 = (str) => {
